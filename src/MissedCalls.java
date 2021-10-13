@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class MissedCalls extends Contacts {
@@ -10,19 +11,21 @@ public class MissedCalls extends Contacts {
     }
 
     public static void addMissedCall(String phone) {
+
         missedCalls.put(LocalDateTime.now(), phone);
     }
 
     public static List<MissedCallsItem> missedCallsToList() {
         List<MissedCallsItem> missedCallsList = new ArrayList<>();
         for (Map.Entry<LocalDateTime, String> entry : missedCalls.entrySet()) {
+            LocalDateTime dateAndTime = entry.getKey();
             String phone = entry.getValue();
             for (Contact c : phonebook.values()) {
                 if (c.getPhone().equals(phone)) {
                     phone = c.getNameAndSurname();
                 }
             }
-            MissedCallsItem newMissedCall = new MissedCallsItem(entry.getKey(), phone);
+            MissedCallsItem newMissedCall = new MissedCallsItem(dateAndTime, phone);
             missedCallsList.add(newMissedCall);
         }
         return missedCallsList;
