@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -116,6 +117,12 @@ public class Main {
     }
 
     public static void showAllMissedCalls(MissedCalls missedCalls) {
-        missedCalls.showAllMissedCalls();
+        List<MissedCallsItem> missedCallsItemList = missedCalls.missedCallsToList();
+        if (missedCallsItemList.isEmpty()) {
+            System.out.println("Пропущенных вызовов нет!\n");
+        } else for (MissedCallsItem m : missedCallsItemList) {
+            System.out.println(m);
+        }
+        System.out.println();
     }
 }
