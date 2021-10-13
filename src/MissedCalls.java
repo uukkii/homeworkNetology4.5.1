@@ -1,28 +1,24 @@
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
-public final class MissedCalls extends Contact{
+public class MissedCalls extends Contacts {
 
-    private static final Scanner console = new Scanner(System.in);
+    protected static Map<LocalDateTime, String> missedCalls;
+    protected static List<MissedCallsItem> listOfMissedCalls = new ArrayList<>();
 
-    public static final Map<LocalDateTime, String> missedCalls = new TreeMap<>();
+    public MissedCalls() { missedCalls = new TreeMap<>(); }
 
-    MissedCalls(String name, String surname, String phone, Enum<Group> group) {
-        super(name, surname, phone, group);
-    }
-
-    public static void addMissedCall(Map<LocalDateTime, String> missedCalls) {
-        System.out.println("Введите номер абонента, от которого получен пропущенный звонок:");
-        String number = console.nextLine();
-        if (phonebook.containsKey(number)) {
-            number = phonebook.get(number).getContact();
+    public static void addMissedCall(String phone) {
+        if (phonebook.containsKey(phone)) {
+            phone = phonebook.get(phone).getNameAndSurname();
         }
-        missedCalls.put(LocalDateTime.now(), number);
+        missedCalls.put(LocalDateTime.now(), phone);
+
+        MissedCallsItem newMissedCall = new MissedCallsItem(LocalDateTime.now(), phone);
+        listOfMissedCalls.add(newMissedCall);
     }
 
-    public static void showAllMissedCalls(Map<LocalDateTime, String> missedCalls) {
+    public static void showAllMissedCalls() {
         if (missedCalls.isEmpty()) {
             System.out.println("Пропущенных вызовов нет!\n");
         } else for(Map.Entry<LocalDateTime, String> entry : missedCalls.entrySet()) {
@@ -30,9 +26,8 @@ public final class MissedCalls extends Contact{
         }
     }
 
-    public static void deleteAllMissedCalls(Map<LocalDateTime, String> missedCalls) {
+    public static void deleteAllMissedCalls() {
         missedCalls.clear();
         System.out.println("Журнал пропущенных вызовов очищен!\n");
     }
-
 }
