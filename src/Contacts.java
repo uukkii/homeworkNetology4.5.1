@@ -27,6 +27,16 @@ public class Contacts {
             System.out.println("Результаты поиска:\nПо номеру телефона: " + phone + " найден контакт:\n" + phonebook.get(phone) + "\n");
     }
 
+    public static Contact returnContact(String name, String surname) {
+        for (Contact c : phonebook.values()) {
+            if (c.getName().equals(name) && c.getSurname().equals(surname)) {
+                return c;
+            } else System.out.println("Такого контакта нет!");
+            return null;
+        }
+        return null;
+    }
+
     public static void showAllContacts() {
         System.out.println("Ваша телефонная книга:");
         for (Map.Entry<String, Contact> entry : phonebook.entrySet()) {

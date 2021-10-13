@@ -2,8 +2,8 @@ public enum Group {
 
     WORK("Работа"),
     FRIENDS("Друзья"),
-    FAMILY("Семья");
-
+    FAMILY("Семья"),
+    DEFAULT("-");
 
     private String title;
 

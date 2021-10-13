@@ -1,6 +1,4 @@
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -32,14 +30,16 @@ public class Main {
                                 1. Добавить контакт.
                                 2. Удалить контакт.
                                 3. Найти контакт.
-                                4. Показать все контакты.
+                                4. Редактировать контакт.
+                                5. Показать все контакты.
                                 Или введите '0', чтобы вернуться в главное меню.""");
                         int input1 = console.nextInt();
                         switch (input1) {
                             case 1 -> addContact(contacts);
                             case 2 -> removeContact(contacts);
                             case 3 -> searchContact(contacts);
-                            case 4 -> showAllContacts(contacts);
+                            case 4 -> editContact(contacts);
+                            case 5 -> showAllContacts(contacts);
                             case 0 -> {
                                 break loopIt;
                             }
@@ -78,6 +78,7 @@ public class Main {
             groupIn = "FRIENDS";
         } else {
             System.out.println("Такой группы нет!\n");
+            groupIn = "DEFAULT";
         }
         Group group = Group.valueOf(groupIn);
 
@@ -103,6 +104,68 @@ public class Main {
 
     public static void showAllContacts(Contacts contacts) {
         contacts.showAllContacts();
+    }
+
+    public static void editContact(Contacts contacts) {
+        contacts.showAllContacts();
+        console.nextLine();
+        System.out.println("Введите имя и фамилию контакта, которого необходимо отредактировать (Пример: Иван Иванов):");
+        String[] input = console.nextLine().split(" ");
+        String name = input[0], surname = input[1];
+        Contact editinigContact = contacts.returnContact(name, surname);
+        loopEdition:
+        while (true) {
+            System.out.println("Информация о редактируемом контакте: " + editinigContact);
+            System.out.println("""
+                    Что необходимо изменить?:\s
+                    1. Имя контакта.
+                    2. Фамилию контакта.
+                    3. Номер телефона контакта.
+                    4. Группу принадлежности контакта.
+                    Или введите '0' для возврата в прошлое меню.""");
+            int input2 = console.nextInt();
+            switch (input2) {
+                case 1 -> {
+                    console.nextLine();
+                    System.out.println("Введине новое имя контакта:");
+                    String newName = console.nextLine();
+                    editinigContact.setName(newName);
+                }
+                case 2 -> {
+                    console.nextLine();
+                    System.out.println("Введине новую фамилию контакта:");
+                    String newSurname = console.nextLine();
+                    editinigContact.setSurname(newSurname);
+                }
+                case 3 -> {
+                    console.nextLine();
+                    System.out.println("Введите новый номер телефона контакта:");
+                    String newPhone = console.nextLine();
+                    editinigContact.setPhone(newPhone);
+                }
+                case 4 -> {
+                    console.nextLine();
+                    System.out.println("Введите новую группу принадлежности контакта (Семья/Друзья/Работа):");
+                    String newGroup = console.nextLine();
+                    if ("Семья".equals(newGroup)) {
+                        newGroup = "FAMILY";
+                    } else if ("Работа".equals(newGroup)) {
+                        newGroup = "WORK";
+                    } else if ("Друзья".equals(newGroup)) {
+                        newGroup = "FRIENDS";
+                    } else {
+                        System.out.println("Такой группы нет!\n");
+                        newGroup = "DEFAULT";
+                    }
+                    Group newContactGroup = Group.valueOf(newGroup);
+                    editinigContact.setGroup(newContactGroup);
+                }
+                case 0 -> {
+                    break loopEdition;
+                }
+                default -> System.out.println(defaultSwitchAnswer);
+            }
+        }
     }
 
     public static void addMissedCall(MissedCalls missedCalls) {

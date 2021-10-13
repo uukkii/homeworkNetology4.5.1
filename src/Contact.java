@@ -22,6 +22,23 @@ public final class Contact {
         return phone;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setGroup(Enum<Group> group) {
+        this.group = group;
+    }
+
+
     @Override
     public String toString() {
         return name + " " + surname + " [" + phone + "] " + "(" + group + ")";
