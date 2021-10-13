@@ -12,6 +12,7 @@ public class MissedCalls extends Contacts {
         if (phonebook.containsKey(phone)) {
             phone = phonebook.get(phone).getNameAndSurname();
         }
+
         missedCalls.put(LocalDateTime.now(), phone);
 
         MissedCallsItem newMissedCall = new MissedCallsItem(LocalDateTime.now(), phone);
