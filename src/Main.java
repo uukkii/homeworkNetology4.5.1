@@ -5,11 +5,10 @@ public class Main {
 
     private static final Scanner console = new Scanner(System.in);
     private static final String defaultSwitchAnswer = "Неправильный ввод!";
+    private static Contacts contacts = new Contacts();
+    private static MissedCalls missedCalls = new MissedCalls();
 
     public static void main(String[] args) {
-        Contacts contacts = new Contacts();
-        MissedCalls missedCalls = new MissedCalls();
-
         System.out.println("Добро пожаловать в программу 'Телефонная книга'!");
         loop:
         while (true) {
@@ -48,7 +47,7 @@ public class Main {
                     }
                 }
                 case 2 -> addMissedCall(missedCalls);
-                case 3 -> showAllMissedCalls(missedCalls);
+                case 3 -> showAllMissedCalls();
                 case 4 -> deleteAllMissedCalls(missedCalls);
                 case 0 -> {
                     System.out.println("Спасибо за использование!");
@@ -70,17 +69,17 @@ public class Main {
 
         System.out.println("В какую группу добавить контакт? (Семья/Друзья/Работа)");
         String groupIn = console.nextLine();
+        Group group;
         if ("Семья".equals(groupIn)) {
-            groupIn = "FAMILY";
+            group = Group.FAMILY;
         } else if ("Работа".equals(groupIn)) {
-            groupIn = "WORK";
+            group = Group.WORK;
         } else if ("Друзья".equals(groupIn)) {
-            groupIn = "FRIENDS";
+            group = Group.FRIENDS;
         } else {
             System.out.println("Такой группы нет!\n");
-            groupIn = "DEFAULT";
+            group = Group.DEFAULT;
         }
-        Group group = Group.valueOf(groupIn);
 
         Contact contact = new Contact(name, surname, phone, group);
         contacts.addContact(contact);
@@ -113,59 +112,60 @@ public class Main {
         String[] input = console.nextLine().split(" ");
         String name = input[0], surname = input[1];
         Contact editinigContact = contacts.returnContact(name, surname);
-        loopEdition:
-        while (true) {
-            System.out.println("Информация о редактируемом контакте: " + editinigContact);
-            System.out.println("""
-                    Что необходимо изменить?:\s
-                    1. Имя контакта.
-                    2. Фамилию контакта.
-                    3. Номер телефона контакта.
-                    4. Группу принадлежности контакта.
-                    Или введите '0' для возврата в прошлое меню.""");
-            int input2 = console.nextInt();
-            switch (input2) {
-                case 1 -> {
-                    console.nextLine();
-                    System.out.println("Введине новое имя контакта:");
-                    String newName = console.nextLine();
-                    editinigContact.setName(newName);
-                }
-                case 2 -> {
-                    console.nextLine();
-                    System.out.println("Введине новую фамилию контакта:");
-                    String newSurname = console.nextLine();
-                    editinigContact.setSurname(newSurname);
-                }
-                case 3 -> {
-                    console.nextLine();
-                    System.out.println("Введите новый номер телефона контакта:");
-                    String newPhone = console.nextLine();
-                    editinigContact.setPhone(newPhone);
-                }
-                case 4 -> {
-                    console.nextLine();
-                    System.out.println("Введите новую группу принадлежности контакта (Семья/Друзья/Работа):");
-                    String newGroup = console.nextLine();
-                    if ("Семья".equals(newGroup)) {
-                        newGroup = "FAMILY";
-                    } else if ("Работа".equals(newGroup)) {
-                        newGroup = "WORK";
-                    } else if ("Друзья".equals(newGroup)) {
-                        newGroup = "FRIENDS";
-                    } else {
-                        System.out.println("Такой группы нет!\n");
-                        newGroup = "DEFAULT";
+        if (editinigContact != null)
+            loopEdition:
+                    while (true) {
+                        System.out.println("Информация о редактируемом контакте: " + editinigContact);
+                        System.out.println("""
+                                Что необходимо изменить?:\s
+                                1. Имя контакта.
+                                2. Фамилию контакта.
+                                3. Номер телефона контакта.
+                                4. Группу принадлежности контакта.
+                                Или введите '0' для возврата в прошлое меню.""");
+                        int input2 = console.nextInt();
+                        switch (input2) {
+                            case 1 -> {
+                                console.nextLine();
+                                System.out.println("Введине новое имя контакта:");
+                                String newName = console.nextLine();
+                                editinigContact.setName(newName);
+                            }
+                            case 2 -> {
+                                console.nextLine();
+                                System.out.println("Введине новую фамилию контакта:");
+                                String newSurname = console.nextLine();
+                                editinigContact.setSurname(newSurname);
+                            }
+                            case 3 -> {
+                                console.nextLine();
+                                System.out.println("Введите новый номер телефона контакта:");
+                                String newPhone = console.nextLine();
+                                editinigContact.setPhone(newPhone);
+                            }
+                            case 4 -> {
+                                console.nextLine();
+                                System.out.println("Введите новую группу принадлежности контакта (Семья/Друзья/Работа):");
+                                String groupIn = console.nextLine();
+                                Group newGroup;
+                                if ("Семья".equals(groupIn)) {
+                                    newGroup = Group.FAMILY;
+                                } else if ("Работа".equals(groupIn)) {
+                                    newGroup = Group.WORK;
+                                } else if ("Друзья".equals(groupIn)) {
+                                    newGroup = Group.FRIENDS;
+                                } else {
+                                    System.out.println("Такой группы нет!\n");
+                                    newGroup = Group.DEFAULT;
+                                }
+                                editinigContact.setGroup(newGroup);
+                            }
+                            case 0 -> {
+                                break loopEdition;
+                            }
+                            default -> System.out.println(defaultSwitchAnswer);
+                        }
                     }
-                    Group newContactGroup = Group.valueOf(newGroup);
-                    editinigContact.setGroup(newContactGroup);
-                }
-                case 0 -> {
-                    break loopEdition;
-                }
-                default -> System.out.println(defaultSwitchAnswer);
-            }
-        }
     }
 
     public static void addMissedCall(MissedCalls missedCalls) {
@@ -179,11 +179,11 @@ public class Main {
         missedCalls.deleteAllMissedCalls();
     }
 
-    public static void showAllMissedCalls(MissedCalls missedCalls) {
-        List<MissedCallsItem> missedCallsItemList = missedCalls.missedCallsToList();
-        if (missedCallsItemList.isEmpty()) {
+    public static void showAllMissedCalls() {
+        List<MissedCallsItem> replacedMissedCallsList = contacts.replaceContactsInList();
+        if (replacedMissedCallsList.isEmpty()) {
             System.out.println("Пропущенных вызовов нет!\n");
-        } else for (MissedCallsItem m : missedCallsItemList) {
+        } else for (MissedCallsItem m : replacedMissedCallsList) {
             System.out.println(m);
         }
         System.out.println();

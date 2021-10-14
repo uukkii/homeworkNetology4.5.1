@@ -3,6 +3,8 @@ import java.time.format.DateTimeFormatter;
 
 public final class MissedCallsItem {
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd2");
+
     private LocalDateTime time;
     private String phone;
 
@@ -15,10 +17,12 @@ public final class MissedCallsItem {
         return phone;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd2");
         return time.format(formatter) + " - " + phone;
     }
 }
-

@@ -1,11 +1,14 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Contacts {
 
     protected static Map<String, Contact> phonebook;
 
-    public Contacts() { phonebook = new HashMap<>(); }
+    public Contacts() {
+        phonebook = new HashMap<>();
+    }
 
     public static void addContact(Contact contact) {
         String phone = contact.getPhone();
@@ -31,10 +34,13 @@ public class Contacts {
         for (Contact c : phonebook.values()) {
             if (c.getName().equals(name) && c.getSurname().equals(surname)) {
                 return c;
-            } else System.out.println("Такого контакта нет!");
-            return null;
+            }
         }
+        System.out.println("Такого контакта нет!");
         return null;
+    }
+
+    public static void rewriteContact() {
     }
 
     public static void showAllContacts() {
@@ -43,5 +49,19 @@ public class Contacts {
             System.out.println(entry.getValue());
         }
         System.out.println();
+    }
+
+    public static List<MissedCallsItem> replaceContactsInList() {
+        List<MissedCallsItem> missedCallsItemList = MissedCalls.missedCallsToList();
+        for (MissedCallsItem mci : missedCallsItemList) {
+            String phone = mci.getPhone();
+            for (Contact c : phonebook.values()) {
+                if (c.getPhone().equals(phone)) {
+                    phone = c.getNameAndSurname();
+                    mci.setPhone(phone);
+                }
+            }
+        }
+        return missedCallsItemList;
     }
 }
