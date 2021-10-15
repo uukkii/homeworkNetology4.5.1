@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Contacts {
 
-    protected static Map<String, Contact> phonebook;
+    private static Map<String, Contact> phonebook;
 
     public Contacts() {
         phonebook = new HashMap<>();
@@ -20,6 +20,13 @@ public class Contacts {
             if (c.getName().equals(name) && c.getSurname().equals(surname)) {
                 phonebook.remove(c.getPhone());
             } else System.out.println("Такого контакта нет!");
+        }
+    }
+
+    public static void removeContactByPhone(String phone) {
+        for (Contact c : phonebook.values()) {
+            if (c.getPhone().equals(phone))
+            phonebook.remove(c.getPhone());
         }
     }
 
@@ -40,10 +47,7 @@ public class Contacts {
         return null;
     }
 
-    public static void rewriteContact() {
-    }
-
-    public static void showAllContacts() {
+    public static void showAllContacts(Contacts contacts) {
         System.out.println("Ваша телефонная книга:");
         for (Map.Entry<String, Contact> entry : phonebook.entrySet()) {
             System.out.println(entry.getValue());
@@ -51,15 +55,15 @@ public class Contacts {
         System.out.println();
     }
 
-    public static List<MissedCallsItem> replaceContactsInList() {
-        List<MissedCallsItem> missedCallsItemList = MissedCalls.missedCallsToList();
+    public static List<MissedCallsItem> replaceContactsInList(MissedCalls missedCalls) {
+        List<MissedCallsItem> missedCallsItemList = missedCalls.missedCallsToList();
         for (MissedCallsItem mci : missedCallsItemList) {
             String phone = mci.getPhone();
             for (Contact c : phonebook.values()) {
                 if (c.getPhone().equals(phone)) {
                     phone = c.getNameAndSurname();
                     mci.setPhone(phone);
-                }
+                } else continue;
             }
         }
         return missedCallsItemList;

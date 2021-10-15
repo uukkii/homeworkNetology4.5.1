@@ -10,16 +10,13 @@ public class MissedCalls {
     }
 
     public static void addMissedCall(String phone) {
-
         missedCalls.put(LocalDateTime.now(), phone);
     }
 
     public static List<MissedCallsItem> missedCallsToList() {
         List<MissedCallsItem> missedCallsList = new ArrayList<>();
         for (Map.Entry<LocalDateTime, String> entry : missedCalls.entrySet()) {
-            LocalDateTime dateAndTime = entry.getKey();
-            String phone = entry.getValue();
-            MissedCallsItem newMissedCall = new MissedCallsItem(dateAndTime, phone);
+            MissedCallsItem newMissedCall = new MissedCallsItem(entry.getKey(), entry.getValue());
             missedCallsList.add(newMissedCall);
         }
         return missedCallsList;

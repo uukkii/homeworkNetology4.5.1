@@ -5,8 +5,8 @@ public class Main {
 
     private static final Scanner console = new Scanner(System.in);
     private static final String defaultSwitchAnswer = "Неправильный ввод!";
-    private static Contacts contacts = new Contacts();
-    private static MissedCalls missedCalls = new MissedCalls();
+    private static final Contacts contacts = new Contacts();
+    private static final MissedCalls missedCalls = new MissedCalls();
 
     public static void main(String[] args) {
         System.out.println("Добро пожаловать в программу 'Телефонная книга'!");
@@ -47,7 +47,7 @@ public class Main {
                     }
                 }
                 case 2 -> addMissedCall(missedCalls);
-                case 3 -> showAllMissedCalls();
+                case 3 -> showAllMissedCalls(missedCalls, contacts);
                 case 4 -> deleteAllMissedCalls(missedCalls);
                 case 0 -> {
                     System.out.println("Спасибо за использование!");
@@ -86,7 +86,7 @@ public class Main {
     }
 
     public static void removeContact(Contacts contacts) {
-        contacts.showAllContacts();
+        contacts.showAllContacts(contacts);
         console.nextLine();
         System.out.println("Введите имя и фамилию контакта, которого необходимо удалить (Пример: Иван Иванов):");
         String[] input = console.nextLine().split(" ");
@@ -102,20 +102,20 @@ public class Main {
     }
 
     public static void showAllContacts(Contacts contacts) {
-        contacts.showAllContacts();
+        contacts.showAllContacts(contacts);
     }
 
     public static void editContact(Contacts contacts) {
-        contacts.showAllContacts();
+        contacts.showAllContacts(contacts);
         console.nextLine();
         System.out.println("Введите имя и фамилию контакта, которого необходимо отредактировать (Пример: Иван Иванов):");
         String[] input = console.nextLine().split(" ");
         String name = input[0], surname = input[1];
-        Contact editinigContact = contacts.returnContact(name, surname);
-        if (editinigContact != null)
+        Contact editingContact = contacts.returnContact(name, surname);
+        if (editingContact != null)
             loopEdition:
                     while (true) {
-                        System.out.println("Информация о редактируемом контакте: " + editinigContact);
+                        System.out.println("Информация о редактируемом контакте: " + editingContact);
                         System.out.println("""
                                 Что необходимо изменить?:\s
                                 1. Имя контакта.
@@ -129,19 +129,21 @@ public class Main {
                                 console.nextLine();
                                 System.out.println("Введине новое имя контакта:");
                                 String newName = console.nextLine();
-                                editinigContact.setName(newName);
+                                editingContact.setName(newName);
                             }
                             case 2 -> {
                                 console.nextLine();
                                 System.out.println("Введине новую фамилию контакта:");
                                 String newSurname = console.nextLine();
-                                editinigContact.setSurname(newSurname);
+                                editingContact.setSurname(newSurname);
                             }
                             case 3 -> {
                                 console.nextLine();
                                 System.out.println("Введите новый номер телефона контакта:");
                                 String newPhone = console.nextLine();
-                                editinigContact.setPhone(newPhone);
+                                contacts.removeContactByPhone(editingContact.getPhone());
+                                editingContact.setPhone(newPhone);
+                                contacts.addContact(editingContact);
                             }
                             case 4 -> {
                                 console.nextLine();
@@ -158,7 +160,7 @@ public class Main {
                                     System.out.println("Такой группы нет!\n");
                                     newGroup = Group.DEFAULT;
                                 }
-                                editinigContact.setGroup(newGroup);
+                                editingContact.setGroup(newGroup);
                             }
                             case 0 -> {
                                 break loopEdition;
@@ -179,10 +181,10 @@ public class Main {
         missedCalls.deleteAllMissedCalls();
     }
 
-    public static void showAllMissedCalls() {
-        List<MissedCallsItem> replacedMissedCallsList = contacts.replaceContactsInList();
+    public static void showAllMissedCalls(MissedCalls missedCalls, Contacts contacts) {
+        List<MissedCallsItem> replacedMissedCallsList = contacts.replaceContactsInList(missedCalls);
         if (replacedMissedCallsList.isEmpty()) {
-            System.out.println("Пропущенных вызовов нет!\n");
+            System.out.println("Пропущенных вызовов нет!");
         } else for (MissedCallsItem m : replacedMissedCallsList) {
             System.out.println(m);
         }
