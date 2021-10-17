@@ -141,7 +141,7 @@ public class Main {
                                 console.nextLine();
                                 System.out.println("Введите новый номер телефона контакта:");
                                 String newPhone = console.nextLine();
-                                contacts.removeContactByPhone(editingContact.getPhone());
+                                contacts.removeContact(editingContact);
                                 editingContact.setPhone(newPhone);
                                 contacts.addContact(editingContact);
                             }

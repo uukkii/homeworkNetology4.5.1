@@ -3,7 +3,7 @@ import java.time.format.DateTimeFormatter;
 
 public final class MissedCallsItem {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
     private LocalDateTime time;
     private String phone;
 
