@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
 
@@ -7,6 +8,7 @@ public class Main {
     private static final String defaultSwitchAnswer = "Неправильный ввод!";
     private static final Contacts contacts = new Contacts();
     private static final MissedCalls missedCalls = new MissedCalls();
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss yyyy-MM-dd");
 
     public static void main(String[] args) {
         System.out.println("Добро пожаловать в программу 'Телефонная книга'!");
@@ -98,7 +100,10 @@ public class Main {
         console.nextLine();
         System.out.println("Введите номер телефона контакта, которого необходимо найти:");
         String phone = console.nextLine();
-        contacts.searchContactByNumber(phone);
+        Contact foundContact = contacts.searchContactByNumber(phone);
+        if (foundContact == null) {
+            System.out.println("Такого контакта в телефонной книге нет!");
+        } else System.out.println("Результаты поиска:\nПо номеру телефона: " + phone + " найден контакт:\n" + foundContact + "\n");
     }
 
     public static void showAllContacts(Contacts contacts) {
@@ -182,12 +187,15 @@ public class Main {
     }
 
     public static void showAllMissedCalls(MissedCalls missedCalls, Contacts contacts) {
-        List<MissedCallsItem> replacedMissedCallsList = contacts.replaceContactsInList(missedCalls);
-        if (replacedMissedCallsList.isEmpty()) {
+        List<MissedCallsItem> missedCallsItemList = missedCalls.missedCallsToList();
+        if (missedCallsItemList.isEmpty()) {
             System.out.println("Пропущенных вызовов нет!");
-        } else for (MissedCallsItem m : replacedMissedCallsList) {
-            System.out.println(m);
-        }
+        } else for (MissedCallsItem item : missedCallsItemList) {
+            Contact comparedContact = contacts.searchContactByNumber(item.getPhone());
+            if (comparedContact != null && item.getPhone().equals(comparedContact.getPhone())) {
+                    System.out.println(item.getTime().format(formatter) + " - " + comparedContact);
+                } else System.out.println(item.getTime().format(formatter) + " - " + item.getPhone());
+            }
         System.out.println();
+        }
     }
-}

@@ -1,5 +1,4 @@
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Contacts {
@@ -25,16 +24,13 @@ public class Contacts {
     }
 
     public void removeContact(Contact contact) {
-        if (!phonebook.containsKey(contact.getPhone())) {
+        if (phonebook.containsKey(contact.getPhone())) {
             phonebook.remove(contact.getPhone());
         } else System.out.println(noContactError);
     }
 
-    public void searchContactByNumber(String phone) {
-        if (!phonebook.containsKey(phone)) {
-            System.out.println(noContactError);
-        } else
-            System.out.println("Результаты поиска:\nПо номеру телефона: " + phone + " найден контакт:\n" + phonebook.get(phone) + "\n");
+    public Contact searchContactByNumber(String phone) {
+        return phonebook.getOrDefault(phone, null);
     }
 
     public Contact returnContact(String name, String surname) {
@@ -55,19 +51,5 @@ public class Contacts {
             System.out.println(entry.getValue());
         }
         System.out.println();
-    }
-
-    public List<MissedCallsItem> replaceContactsInList(MissedCalls missedCalls) {
-        List<MissedCallsItem> missedCallsItemList = missedCalls.missedCallsToList();
-        for (MissedCallsItem mci : missedCallsItemList) {
-            String phone = mci.getPhone();
-            for (Contact c : phonebook.values()) {
-                if (c.getPhone().equals(phone)) {
-                    phone = c.getNameAndSurname();
-                    mci.setPhone(phone);
-                }
-            }
-        }
-        return missedCallsItemList;
     }
 }
