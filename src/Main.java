@@ -192,7 +192,7 @@ public class Main {
             System.out.println("Пропущенных вызовов нет!");
         } else for (MissedCallsItem item : missedCallsItemList) {
             Contact comparedContact = contacts.searchContactByNumber(item.getPhone());
-            if (comparedContact != null && item.getPhone().equals(comparedContact.getPhone())) {
+            if (comparedContact != null) {
                     System.out.println(item.getTime().format(formatter) + " - " + comparedContact);
                 } else System.out.println(item.getTime().format(formatter) + " - " + item.getPhone());
             }
